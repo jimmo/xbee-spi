@@ -17,3 +17,5 @@ This firmware will run the SPI clock whenever there are bytes to send host->xbee
 ### Notes
 - The SPI interface always forces API mode 1 (no escaping). XCTU always sends the AP command as its first query, so it deals with this fine.
 - XCTU will fail to connect to a device that sends invalid bytes outside of valid frames (i.e. it doesn't ignore non-frame data), so the firmware has some very basic frame parsing to deal with this. Other APIs (e.g. `python-xbee`) just handle this.
+
+![XBee module, 1Bitsy, Black Magic Probe](doc/xbee-1bitsy-bmp.jpg)
