@@ -7,7 +7,7 @@ As explained in the XBee documentation, when the XBee->Host buffer is full, the 
 
 The SPI interface can run up to 5Mbit, so in theory it should be possible to drain the xbee->host buffer faster using SPI, and use a bigger buffer.
 
-This is written for the STM32F4 (specifically a 1Bitsy board) because it's what I had on hand, but it's quite overpowered for this task! I'm using a [SparkFun XBee Explorer Regulated](https://www.sparkfun.com/products/11373) which just adds an LDO and status LEDs, and connecting the SPI+nATTN pins to the 1Bitsy. Previously (and what this replaces) was a [SparkFun XBee Explorer USB][https://www.sparkfun.com/products/11373] which has a FTDI-based USB UART interface.
+This is written for the STM32F4 (specifically a 1Bitsy board) because it's what I had on hand, but it's quite overpowered for this task! I'm using a [SparkFun XBee Explorer Regulated](https://www.sparkfun.com/products/11373) which just adds an LDO and status LEDs, and connecting the SPI+nATTN pins to the 1Bitsy. Previously (and what this replaces) was a [SparkFun XBee Explorer USB](https://www.sparkfun.com/products/11373) which has a FTDI-based USB UART interface.
 
 ### But does it work?
 Maybe! This was an intermittent problem to begin with, so far I haven't seen a dropped announce ZDO.
