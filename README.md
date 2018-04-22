@@ -1,6 +1,6 @@
 ## xbee-spi -- Buffered SPI to USB UART bridge for XBee modules.
 
-The XBee modules from Digi (e.g. the S2C ZigBee module I'm using for HA projects) have both a UART and a SPI interface. This is simple firmware for an STM32F4 to act as a SPI->USB bridge (i.e. performs roughly the same functionality as the FTDI chip on a regular XBee breakout board). It also works with XCTU.
+The XBee modules from Digi (e.g. the [S2C ZigBee module](https://www.digi.com/resources/documentation/digidocs/pdfs/90002002.pdf) I'm using for HA projects) have both a UART and a SPI interface. This is simple firmware for an STM32F4 to act as a SPI->USB bridge (i.e. performs roughly the same functionality as the FTDI chip on a regular XBee breakout board). It also works with XCTU.
 
 ### Why?
 As explained in the XBee documentation, when the XBee->Host buffer is full, the module will drop incoming frames. Not only are the buffers tiny, but the UART runs at a maximum baud rate of 115200bps, but ZigBee can transmit data at 250kbit. When lots of devices are sending messages on the network at the same time, the buffer can easily overflow. A good example of this is a roomfull of lightbulbs being turned on at the same time, sending their `Device Announce` ZDO, or a bunch of devices all responding to a command (e.g. sending ZCL responses) together.
@@ -18,6 +18,13 @@ One easy test (but not sure if realistic) is to send a bunch of AT commands (via
 The XBee acts as a SPI slave with a nATTN line to indicate that the master should read. The nATTN line can be asserted mid-transmit (i.e. it doesn't use the nSS line to delimit transactions), so a transmit and receive can overlap arbritrarily.
 
 This firmware will run the SPI clock whenever there are bytes to send Host->XBee or while the XBee is asserting nATTN. This means that we end up receiving a lot of "undefined" bytes from the XBee but the frame detection will filter them out before sending to the host.
+
+More info at [An Introduction to SPI on XBee](http://ftp1.digi.com/support/documentation/An%20Introduction%20to%20SPI%20on%20XBee.pdf).
+
+### Wiring up the 1Bitsy and XBee
+This uses SPI2 on PB12-15, and the nATTN line is connected to PC12. See the [1Bitsy pinout](https://raw.githubusercontent.com/1Bitsy/1bitsy-hardware/master/doc/1bitsy_v1_0d_legend.png).
+
+On the XBee (through-hole), the SPI pins are MISO=DIO1, MOSI=DIO4, nSS=DIO3, CLK=DIO3, nATTN=DIO1.
 
 ### Notes
 - The SPI interface always forces API mode 1 (no escaping). XCTU always sends the AP command as its first query, so it deals with this fine.
