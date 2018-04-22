@@ -1,0 +1,6 @@
+*.o
+*.map
+*.elf
+*.bin
+*.d
+generated.*.ld
