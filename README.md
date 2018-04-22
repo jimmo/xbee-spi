@@ -12,7 +12,7 @@ This is written for the STM32F4 (specifically a 1Bitsy board) because it's what 
 ### But does it work?
 Maybe! This was an intermittent problem to begin with, so far I haven't seen a dropped `Device Announce` ZDO.
 
-One easy test is to send a bunch of AT commands (via API frames) and ensure they all get replied to. e.g. send 6 commands, and wait for replies. This definitely shows an improvement over the FTDI breakout.
+One easy test (but not sure if realistic) is to send a bunch of AT commands (via API frames) and ensure they all get replied to. e.g. send 16 `OP` commands as fast as possible, then sleep for 50ms, the repeat 200 times. This definitely shows an improvement over the FTDI breakout (3161/3200 = 99% response rate vs 1342/3200 = 42% for FTDI).
 
 ### XBee SPI
 The XBee acts as a SPI slave with a nATTN line to indicate that the master should read. The nATTN line can be asserted mid-transmit (i.e. it doesn't use the nSS line to delimit transactions), so a transmit and receive can overlap arbritrarily.
