@@ -52,6 +52,7 @@ int main(void) {
 
       if (i++ == 1000) {
         host_poll();
+        i = 0;
       }
     }
     if (en) {
