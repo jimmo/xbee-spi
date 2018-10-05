@@ -154,6 +154,8 @@ static const char * usb_strings[] = {
 /* Buffer to be used for control requests. */
 uint8_t usbd_control_buffer[128];
 
+static bool _host_connected = false;
+
 static enum usbd_request_return_codes cdcacm_control_request(usbd_device *usbd_dev,
                                   struct usb_setup_data *req,
                                   uint8_t **buf, uint16_t *len,
@@ -169,6 +171,8 @@ static enum usbd_request_return_codes cdcacm_control_request(usbd_device *usbd_d
      * even though it's optional in the CDC spec, and we don't
      * advertise it in the ACM functional descriptor.
      */
+    gpio_toggle(GPIOA, GPIO8);
+    _host_connected = true;
     return USBD_REQ_HANDLED;
   }
   case USB_CDC_REQ_SET_LINE_CODING:
@@ -179,6 +183,10 @@ static enum usbd_request_return_codes cdcacm_control_request(usbd_device *usbd_d
     return USBD_REQ_HANDLED;
   }
   return USBD_REQ_NOTSUPP;
+}
+
+bool host_connected(void) {
+  return _host_connected;
 }
 
 static cbuf_t* data_from_host;

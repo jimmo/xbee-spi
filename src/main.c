@@ -40,24 +40,27 @@ int main(void) {
   gpio_set(GPIOA, GPIO8);
 
   while (1) {
-    while (!gpio_get(GPIOC, GPIO12) || cbuf_avail(&host_to_xbee)) {
-      if (!en) {
-        xbee_start();
-        en = true;
-        //gpio_toggle(GPIOA, GPIO8);
-      }
-      uint8_t h = cbuf_pop(&host_to_xbee);
-      uint8_t x = xbee_transfer(h);
-      cbuf_push(&xbee_to_host, x);
+    if (host_connected()) {
+      while (!gpio_get(GPIOC, GPIO12) || cbuf_avail(&host_to_xbee)) {
+        if (!en) {
+          xbee_start();
+          en = true;
+          //
+        }
+        uint8_t h = cbuf_pop(&host_to_xbee);
+        uint8_t x = xbee_transfer(h);
+        cbuf_push(&xbee_to_host, x);
 
-      if (i++ == 1000) {
-        host_poll();
-        i = 0;
+        if (i++ == 100) {
+          gpio_toggle(GPIOA, GPIO8);
+          host_poll();
+          i = 0;
+        }
       }
-    }
-    if (en) {
-      en = false;
-      xbee_stop();
+      if (en) {
+        en = false;
+        xbee_stop();
+      }
       host_send(&xbee_to_host);
     }
 
